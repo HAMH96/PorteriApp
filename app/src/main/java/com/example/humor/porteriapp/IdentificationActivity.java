@@ -1,30 +1,28 @@
 package com.example.humor.porteriapp;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.UUID;
-import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.SeekBar;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-public class MainActivity extends AppCompatActivity {
 
-    Button btnOn, btnOff;
-    TextView txtArduino, txtString, txtStringLength, sensorView0, sensorView1, sensorView2, sensorView3;
-    TextView txtSendorLDR;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.UUID;
+
+public class IdentificationActivity extends AppCompatActivity {
+
+    protected EditText personalPass;
+    protected Button send;
+    protected String pass;
     Handler bluetoothIn;
 
     final int handlerState = 0;        				 //used to identify handler message
@@ -44,22 +42,12 @@ public class MainActivity extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_identification);
 
         //Link the buttons and textViews to respective views
-        btnOn = (Button) findViewById(R.id.buttonOn);
-        btnOff = (Button) findViewById(R.id.buttonOff);
-        txtString = (TextView) findViewById(R.id.txtString);
-        txtStringLength = (TextView) findViewById(R.id.testView1);
-        /*
-        sensorView0 = (TextView) findViewById(R.id.sensorView0);
-        sensorView1 = (TextView) findViewById(R.id.sensorView1);
-        sensorView2 = (TextView) findViewById(R.id.sensorView2);
-        sensorView3 = (TextView) findViewById(R.id.sensorView3);
-
-        txtSendorLDR = (TextView) findViewById(R.id.tv_sendorldr);
-        */
-
+        personalPass = (EditText) findViewById(R.id.personalPass);
+        send = (Button) findViewById(R.id.sendButton);
+        send.setEnabled(true);
 
         bluetoothIn = new Handler() {
             public void handleMessage(android.os.Message msg) {
@@ -69,26 +57,9 @@ public class MainActivity extends AppCompatActivity {
                     int endOfLineIndex = recDataString.indexOf("~");                    // determine the end-of-line
                     if (endOfLineIndex > 0) {                                           // make sure there data before ~
                         String dataInPrint = recDataString.substring(0, endOfLineIndex);    // extract string
-                        txtString.setText("Datos recibidos = " + dataInPrint);
+                        //txtString.setText("Datos recibidos = " + dataInPrint);
                         int dataLength = dataInPrint.length();							//get length of data received
-                        txtStringLength.setText("Tamaño del String = " + String.valueOf(dataLength));
-
-                        /*if (recDataString.charAt(0) == '#')								//if it starts with # we know it is what we are looking for
-                        {
-                            String sensor0 = recDataString.substring(1, 5);             //get sensor value from string between indices 1-5
-                            String sensor1 = recDataString.substring(6, 10);            //same again...
-                            String sensor2 = recDataString.substring(11, 15);
-                            String sensor3 = recDataString.substring(16, 20);
-
-                            if(sensor0.equals("1.00"))
-                                sensorView0.setText("Encendido");	//update the textviews with sensor values
-                            else
-                                sensorView0.setText("Apagado");	//update the textviews with sensor values
-                            sensorView1.setText(sensor1);
-                            sensorView2.setText(sensor2);
-                            sensorView3.setText(sensor3);
-                            //sensorView3.setText(" Sensor 3 Voltage = " + sensor3 + "V");
-                        }*/
+                        //txtStringLength.setText("Tamaño del String = " + String.valueOf(dataLength));
                         recDataString.delete(0, recDataString.length()); 					//clear all string data
                         // strIncom =" ";
                         dataInPrint = " ";
@@ -99,35 +70,14 @@ public class MainActivity extends AppCompatActivity {
 
         btAdapter = BluetoothAdapter.getDefaultAdapter();       // get Bluetooth adapter
         checkBTState();
-
-
-        // Set up onClick listeners for buttons to send 1 or 0 to turn on/off LED
-        /*btnOff.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                mConnectedThread.write("2");    // Send "2" via Bluetooth
-                Toast.makeText(getBaseContext(), "Apagar el LED", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        btnOn.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                mConnectedThread.write("1");    // Send "1" via Bluetooth
-                Toast.makeText(getBaseContext(), "Encender el LED", Toast.LENGTH_SHORT).show();
-            }
-        });
-        */
     }
 
-    public void on(View view){
-        mConnectedThread.write("1");    // Send "1" via Bluetooth
-        Toast.makeText(getBaseContext(), "Encender el LED", Toast.LENGTH_SHORT).show();
+    public void send(View view){
+        send.setEnabled(false);
+        pass= personalPass.getText().toString();
+        mConnectedThread.write(pass);    // Send "2" via Bluetooth
+        Toast.makeText(getBaseContext(), "Enviando", Toast.LENGTH_SHORT).show();
     }
-
-    public void off(View view){
-        mConnectedThread.write("2");    // Send "2" via Bluetooth
-        Toast.makeText(getBaseContext(), "Apagar el LED", Toast.LENGTH_SHORT).show();
-    }
-
 
     private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {
 
@@ -167,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
                 //insert code to deal with this
             }
         }
-        mConnectedThread = new ConnectedThread(btSocket);
+        mConnectedThread = new IdentificationActivity.ConnectedThread(btSocket);
         mConnectedThread.start();
 
         //I send a character when resuming.beginning transmission to check device is connected
@@ -221,7 +171,6 @@ public class MainActivity extends AppCompatActivity {
             mmInStream = tmpIn;
             mmOutStream = tmpOut;
         }
-
 
         public void run() {
             byte[] buffer = new byte[256];

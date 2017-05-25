@@ -4,5 +4,10 @@
     <string name="welcome">Bienvenido</string>
     <string name="name">Unidad Residencial Paseo de Sevilla</string>
     <string name="connect">Conectar</string>
+    <string name="authenticate">Autenticación</string>
+    <string name="identification">Identificación</string>
+    <string name="identiExplain">Por favor ingrese su clave personal y presione Enviar</string>
+    <string name="personalPass">Clave personal</string>
+    <string name="send">Enviar</string>
 
 </resources>

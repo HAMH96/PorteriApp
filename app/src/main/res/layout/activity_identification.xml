@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.humor.porteriapp.ConnectActivity">
+    tools:context="com.example.humor.porteriapp.IdentificationActivity">
 
     <Space
         android:layout_width="match_parent"
@@ -14,7 +14,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/welcome"
+        android:text="@string/identification"
         android:textColor="@color/md_black_1000"
         android:textSize="30sp"
         android:textAlignment="center"/>
@@ -25,7 +25,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/name"
+        android:text="@string/identiExplain"
         android:textColor="@color/md_black_1000"
         android:textSize="25sp"
         android:textAlignment="center"/>
@@ -34,22 +34,34 @@
         android:layout_width="match_parent"
         android:layout_height="20sp"/>
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:src="@drawable/entrance"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/personalPass"
+        android:layout_marginLeft="110dp"
+        android:id="@+id/personalPass"
+        android:inputType="numberPassword"/>
 
     <Space
         android:layout_width="match_parent"
         android:layout_height="20sp"/>
 
     <Button
-        android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginLeft="1sp"
-        android:text="@string/connect"
-        android:onClick="connect"/>
+        android:text="@string/send"
+        android:layout_marginLeft="145dp"
+        android:onClick="send"
+        android:id="@+id/sendButton"/>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="20sp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"/>
+
 
 </LinearLayout>

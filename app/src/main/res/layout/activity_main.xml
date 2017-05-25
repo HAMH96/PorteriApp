@@ -11,13 +11,15 @@
         android:id="@+id/buttonOn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="LED ON" />
+        android:text="LED ON" 
+        android:onClick="on"/>
 
     <Button
         android:id="@+id/buttonOff"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="LED OFF" />
+        android:text="LED OFF"
+        android:onClick="off"/>
 
     <LinearLayout
         android:orientation="vertical"
