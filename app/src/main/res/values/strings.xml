@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">PorteriApp</string>
+    <string name="none_paired">Ningun dispositivo pudo ser emparejado.</string>
+    <string name="welcome">Bienvenido</string>
+    <string name="name">Unidad Residencial Paseo de Sevilla</string>
+    <string name="connect">Conectar</string>
+
+</resources>
