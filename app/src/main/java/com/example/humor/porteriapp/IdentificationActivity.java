@@ -23,6 +23,8 @@ public class IdentificationActivity extends AppCompatActivity {
     protected EditText personalPass;
     protected Button send;
     protected String pass;
+    protected TextView msgbox;
+    protected int cont;
     Handler bluetoothIn;
 
     final int handlerState = 0;        				 //used to identify handler message
@@ -47,7 +49,9 @@ public class IdentificationActivity extends AppCompatActivity {
         //Link the buttons and textViews to respective views
         personalPass = (EditText) findViewById(R.id.personalPass);
         send = (Button) findViewById(R.id.sendButton);
+        msgbox = (TextView) findViewById(R.id.msgBox);
         send.setEnabled(true);
+        cont=0;
 
         bluetoothIn = new Handler() {
             public void handleMessage(android.os.Message msg) {
@@ -57,6 +61,19 @@ public class IdentificationActivity extends AppCompatActivity {
                     int endOfLineIndex = recDataString.indexOf("~");                    // determine the end-of-line
                     if (endOfLineIndex > 0) {                                           // make sure there data before ~
                         String dataInPrint = recDataString.substring(0, endOfLineIndex);    // extract string
+                        if(dataInPrint.equals("E")){
+                            send.setEnabled(true);
+                            msgbox.setText(" Constraseña incorrecta!");
+                            cont++;
+                            if(cont==3){
+                                send.setEnabled(false);
+                                msgbox.setText(" Ha superado el número de intentos fallidos, espere al  vigilante.");
+                                mConnectedThread.write("w");
+                            }
+                        }
+                        else{
+                            msgbox.setText("Bienvenido "+dataInPrint);
+                        }
                         //txtString.setText("Datos recibidos = " + dataInPrint);
                         int dataLength = dataInPrint.length();							//get length of data received
                         //txtStringLength.setText("Tamaño del String = " + String.valueOf(dataLength));
@@ -75,7 +92,7 @@ public class IdentificationActivity extends AppCompatActivity {
     public void send(View view){
         send.setEnabled(false);
         pass= personalPass.getText().toString();
-        mConnectedThread.write(pass);    // Send "2" via Bluetooth
+        mConnectedThread.write(pass+"%");    // Send "2" via Bluetooth
         Toast.makeText(getBaseContext(), "Enviando", Toast.LENGTH_SHORT).show();
     }
 
